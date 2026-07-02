@@ -1,10 +1,8 @@
-;;-*- lexical-binding: t; -*-
-;;;M-x elisp-enable-lexical-binding RET
 ;;
 ;;
 ;; 2024.12.16
 ;; 2025.06.20 Update 
-;;
+;; 2026.07.02 Update 
 ;;
 ;;
 ;;
