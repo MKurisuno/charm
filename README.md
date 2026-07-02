@@ -1,19 +1,42 @@
 # 
-# Ubuntu 24.10 
+# Ubuntu 26.04.10 
 # 
 # 
 #                  for kurisuno
 #                  2024.12.02 
+#                  2026.06.27 
 # 
-# 
-  dot.early-init.el
+
+dot.early-init.el
   dot.init.el
   dot.zshrc
   dot.gitconfig
 
+#Japanese directory name exchange to English
+ $ LANG=C xdg-user-dirs-gtk-update
+ 
+
+# NVIDIA RTX3060
+ Check the Kernel to recognize GPU. 
+  $ lspci | grep -i nvidia
+
+ Check nvidia-gpu driver avairable.
+  $ sudo ubuntu-drivers list
+  $ sudo apt update
+  $ sudo apt upgrade
+  $ sudo reboot
+  
+ Auto install nvidia-driver.
+  $ sudo ubuntu-drivers install
+  $ sudo reboot
+ CHeck GPU driver exactly loaded. 
+  $ nvidia-smi
+
 
 # for firewall
-  ufw
+  gufw for ufw
+   $ sudo apt install -y gufw
+
 
 # for Virus
    sudo apt install clamav  clamav-daemon
@@ -41,28 +64,46 @@
 
 
 # bash switch to zsh
-  MKurisuno/strange.git  dot.zshrc
+  To change login-shell 
+  $chsh -s /usr/bin/zsh
+  To change terminal shell
+     Instead of SHELL to load custum command  
+     custum command is  /usr/bin/zsh 
+  ---dot.zshrc---
       zinit
 	zsh-syntax-hightlight
 	zsh-autosuggestions
 	zsh-completion
-   	dracula/zsh
-
+   	dracula/zsh 
 
 # emacs 
-   Set up for c,c++mode using lsp-mode.
-   MKurisuno/strange.git
-	dot.early-init.el (require dracula-theme)
-	dot.init.el
-   only  dracula-theme(github:dracula/emacs) needs manual install
-   another packages would be installed at start-up emacs with Leaf.
+    --- early-init.el ---
+    --- init.el ----
+     drucura-theme
+       ln -s duracura-theme-**/dracura-theme.el  ---> .emacs.d/themes/dracura-theme.el 
+
+#Clangd
+  ~/.config/clangd/config.yaml
+  
 
 
 # git 
    MKurisuno/strange.git  dot.gitconfig
 
+
+
+
+# python3...   Install local dir
+ ---Install python3 /
+  $python3 --version --->3.xx
+  $sudo apt install python3-pip
+  $pip3 --version
+ ---Install python package which pip3  in local dir.
+  $mkdir -p ~/.local/bin
+  
+
 # gnome-terminal
-   https://draculatheme.com/gnome-terminal
+    https://draculatheme.com/gnome-terminal
 
 
 
@@ -86,4 +127,6 @@
    2 (disable) or
    3 (enable).
    wifi.powersave = 2
+
+
 
