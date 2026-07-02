@@ -36,6 +36,9 @@
 
 
 
+(define-key key-translation-map [?\C-h] [?\C-?])
+
+
 
 ;;
 ;; display and set global line number

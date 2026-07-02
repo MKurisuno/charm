@@ -62,14 +62,23 @@
   :bind (("C-c e" . macrostep-expand)))
 
 
-(leaf paren
-  :doc "highlight matching paren"
-  :global-minor-mode show-paren-mode)
 (leaf rainbow-delimiters
   :ensure t
   :hook
   (prog-mode-hook . rainbow-delimiters-mode)
   )
+
+(leaf paren
+  :ensure t
+  :hook
+  (after-init-hook . show-paren-mode)
+  :custom-face
+  (show-paren-match . '((nil (:background "#44475a" :foreground "#f1fa8c"))))  
+  :custom ((show-paren-style . 'mixed)
+           (show-paren-when-point-inside-paren . t)
+           (show-paren-when-point-in-periphery . t))
+  )
+
 (leaf  highlight-indent-guides
   :ensure t
   :custom
@@ -86,8 +95,15 @@
   (set-face-foreground 'highlight-indent-guides-character-face "dimgrey")
   )
 
-
-
+;;(leaf iflipb 
+;;  :ensure t
+;;  :custom
+;;  (iflipb-ignore-buffers . '(list "^[*]" "^magit" "]$"))
+;;  (iflipb-wrap-around . t)
+;;  :bind
+;;  ("C-<right>" . iflipb-next-buffer)
+;;  ("C-<left>"  . iflipb-previous-buffer)
+;;  )
 
 
 (leaf simple
@@ -240,17 +256,28 @@
 
 
 (leaf *treesit
-  :custom ((treesit-font-lock-level . 4))
+         ;;(setq treesit-font-lock-level 4)
+  :custom ((treesit-font-lock-level . 4)
+	   )
+ 
+  
   :config
   (require 'treesit)
   ;; ここでいろいろ準備する
   ;;  (add-to-list 'auto-mode-alist '("\\.clj[sc]?\\'" . clojure-mode))
   ;;  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
+  ;;  (add-to-list 'treesit-language-source-alist
+  ;;             '(conao3-clojure "https://github.com/conao3-playground/tree-sitter-conao3-clojure"))
+    (add-to-list 'treesit-language-source-alist
+               '(yaml "https://github.com/ikatyang/tree-sitter-yaml"))
+  
   (add-to-list 'auto-mode-alist '( "CMakeLists\\.txt\\'" . cmake-ts-mode))
   (add-to-list 'auto-mode-alist '( "\\.cmake\\'". cmake-ts-mode))
   (add-to-list 'auto-mode-alist '( "\\.py$'". python-mode))
   (add-to-list 'auto-mode-alist '( "\\.json\\'". js-json-mode))
   (add-to-list 'auto-mode-alist '( "\\.php\\'". php-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.yaml\\'". yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '( "\\.yam\\'". yaml-ts-mode))
 
   ;;
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))  
@@ -259,6 +286,7 @@
   (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
   (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
   (add-to-list 'major-mode-remap-alist '(php-mode . php-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode))
 
   )
 
@@ -269,23 +297,29 @@
   :doc "The Emacs Client for LSP servers"
   :ensure t
   :config
-  (add-to-list 'eglot-server-programs '(python-mode "pylsp"))
-  (add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
+  
+  ;;(add-to-list 'eglot-server-programs '(python-mode "pylsp"))
+  ;;(add-to-list 'eglot-server-programs '(cmake-ts-mode "cmake-language-server"))
   ;;(add-to-list 'eglot-server-programs '((c++-mode c-mode) "ccls"))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+
   
   :hook (;;(clojure-mode-hook . eglot-ensure)
 	 (c-ts-mode-hook . eglot-ensure)
 	 (c++-ts-mode-hook . eglot-ensure)
-	 (python-ts-mode-hook . eglot-ensure)
-	 (cmake-ts-mode-hook . eglot-ensure)
+	 ;;(python-ts-mode-hook . eglot-ensure)
+	 ;;(cmake-ts-mode-hook . eglot-ensure)
 	 )
   :custom ((eldoc-echo-area-use-multiline-p . nil)
            (eglot-connect-timeout . 600)))
+
 
 (leaf eglot-booster
   :when (executable-find "emacs-lsp-booster")
   :vc ( :url "https://github.com/jdtsmith/eglot-booster")
   :global-minor-mode t)
+
+
 
 (leaf projectile
   :ensure t
